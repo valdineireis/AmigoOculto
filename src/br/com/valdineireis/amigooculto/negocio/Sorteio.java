@@ -89,7 +89,7 @@ public class Sorteio {
         if(!totalDePessoasEhPar())
             throw new TotalDePessoasEhImparException();
         
-        this.pessoasCopia = this.copia(pessoas);
+        this.pessoasCopia = this.copiaLista(pessoas);
         
         for (int i = 0; i < this.totalDePessoas(); i++) {
             Pessoa pessoaQueSorteou = this.pessoas.get(i);
@@ -122,8 +122,8 @@ public class Sorteio {
         return randomNum;
     }
     
-    private List<Pessoa> copia(List<Pessoa> pessoas) {
-        List<Pessoa> novaLista = new ArrayList<>();
+    private List<Pessoa> copiaLista(List<Pessoa> pessoas) {
+        List<Pessoa> novaLista = new ArrayList<>(pessoas.size());
         for (Pessoa p : pessoas) {
             novaLista.add(p);
         }
