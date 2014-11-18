@@ -1,8 +1,9 @@
 package br.com.valdineireis.amigooculto.negocio;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import br.com.valdineireis.amigooculto.excecao.TelefoneDuplicadoException;
 import br.com.valdineireis.amigooculto.excecao.TotalDePessoasEhImparException;
 
 import org.junit.Before;
@@ -31,7 +32,7 @@ public class SorteiaTest {
     }
     
     @Test
-    public void deveAdicionarUmaPessoa() throws TelefoneDuplicadoException {
+    public void deveAdicionarUmaPessoa() {
         adicionaPessoas(1);
         
         assertEquals(1, this.sorteador.totalDePessoas());
@@ -39,7 +40,7 @@ public class SorteiaTest {
     }
     
     @Test
-    public void deveAdicionarDuasPessoa() throws TelefoneDuplicadoException {
+    public void deveAdicionarDuasPessoa() {
         adicionaPessoas(2);
         
         assertEquals(2, this.sorteador.totalDePessoas());
@@ -47,42 +48,67 @@ public class SorteiaTest {
     }
     
     @Test
-    public void deveInformarQueAQuantidadeTotalDePessoasEhImpar() throws TelefoneDuplicadoException {
+    public void deveInformarQueAQuantidadeTotalDePessoasEhImpar() {
         adicionaPessoas(1);
         assertFalse(this.sorteador.totalDePessoasEhPar());
     }
     
     @Test
-    public void deveInformarQueAQuantidadeTotalDePessoasEhPar() throws TelefoneDuplicadoException {   
+    public void deveInformarQueAQuantidadeTotalDePessoasEhPar() {   
         adicionaPessoas(2);
         assertTrue(this.sorteador.totalDePessoasEhPar());
     }
     
     @Test(expected = TotalDePessoasEhImparException.class)
-    public void deveSortearApenasQuandoAQuantidadeDePessoasForPar() throws TotalDePessoasEhImparException, TelefoneDuplicadoException {
+    public void deveSortearApenasQuandoAQuantidadeDePessoasForPar() throws TotalDePessoasEhImparException {
         adicionaPessoas(3);
         this.sorteador.inicia();
     }
     
-    @Test(expected = TelefoneDuplicadoException.class)
-    public void deveImpedirTelefoneDuplicado() throws TelefoneDuplicadoException {
+    @Test
+    public void devePermitirTelefoneRepetido() {
         Pessoa p1 = new Pessoa("Valdinei", "9999");
         Pessoa p2 = new Pessoa("Siluana", "9999");
         this.sorteador.addPessoa(p1);
         this.sorteador.addPessoa(p2);
+        
+        if(!this.sorteador.pessoas().contains(p1)) {
+            fail("Deveria existir a pessoa chamada " + p1.getNome());
+        }
+        if(!this.sorteador.pessoas().contains(p2)) {
+            fail("Deveria existir a pessoa chamada " + p2.getNome());
+        }
     }
     
     @Test
-    public void deveSortear() throws TotalDePessoasEhImparException, TelefoneDuplicadoException {
+    public void deveSortearComTelefonesRepetidos() throws TotalDePessoasEhImparException {
+        Pessoa p1 = new Pessoa("Valdinei", "9999");
+        Pessoa p2 = new Pessoa("Siluana", "8888");
+        Pessoa p3 = new Pessoa("Hugo", "8888");
+        Pessoa p4 = new Pessoa("Yasmin", "9999");
+        this.sorteador.addPessoa(p1);
+        this.sorteador.addPessoa(p2);
+        this.sorteador.addPessoa(p3);
+        this.sorteador.addPessoa(p4);
+        
+        Map<Integer, Pessoa> sorteados = this.sorteador.inicia();
+        
+        assertNotNull(sorteados);
+        assertEquals(4, sorteados.size());
+        assertContainsNomePessoa(Arrays.asList(p1, p2, p3, p4), sorteados);
+    }
+    
+    @Test
+    public void deveSortear() throws TotalDePessoasEhImparException {
         adicionaPessoas(8);
-        Map<String, Pessoa> sorteados = this.sorteador.inicia();
+        Map<Integer, Pessoa> sorteados = this.sorteador.inicia();
         
         assertNotNull(sorteados);
         assertEquals(8, sorteados.size());
-        assertContainsNomePessoa(sorteados);
+        assertContainsNomePessoa(this.sorteador.pessoas(), sorteados);
     }
     
-    private void adicionaPessoas(int quantidade) throws TelefoneDuplicadoException {
+    private void adicionaPessoas(int quantidade) {
         for (int i = 0; i < quantidade; i++) {
             Pessoa p = new Pessoa("Pessoa " + i, i + "9999");
             this.sorteador.addPessoa(p);
@@ -95,12 +121,13 @@ public class SorteiaTest {
         }
     }
     
-    private void assertContainsNomePessoa(Map<String, Pessoa> sorteados) {
+    private void assertContainsNomePessoa(List<Pessoa> participantes, Map<Integer, Pessoa> sorteados) {
         for (int i = 0; i < this.sorteador.totalDePessoas(); i++) {
-            Pessoa p = new Pessoa("Pessoa " + i, i + "9999");
-            p.setCodigo(i++);
-            if(!sorteados.containsValue(p)) {
-                fail(p.getNome() + " não encontrado!");
+            Pessoa pessoa = participantes.get(i);
+            //Pessoa p = new Pessoa("Pessoa " + i, i + "9999");
+            pessoa.setCodigo(i++);
+            if(!sorteados.containsValue(pessoa)) {
+                fail("Pessoa com o nome '" + pessoa.getNome() + "', não encontrada!");
             }
         }
     }

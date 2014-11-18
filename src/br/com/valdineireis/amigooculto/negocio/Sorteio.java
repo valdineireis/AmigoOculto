@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import br.com.valdineireis.amigooculto.excecao.TelefoneDuplicadoException;
 import br.com.valdineireis.amigooculto.excecao.TotalDePessoasEhImparException;
 import br.com.valdineireis.amigooculto.modelo.Pessoa;
 
@@ -21,7 +20,7 @@ public class Sorteio {
     /**
      * Objeto contendo o resultado do sorteio
      */
-    private final Map<String, Pessoa> pessoasSorteadas;
+    private final Map<Integer, Pessoa> pessoasSorteadas;
     
     /**
      * Lista de pessoas adicionadas
@@ -64,16 +63,9 @@ public class Sorteio {
 
     /**
      * Adiciona a pessoa
-     * @param pessoa Objeto a ser cadastrado
-     * @throws TelefoneDuplicadoException 
+     * @param pessoa Objeto a ser cadastrado 
      */
-    public void addPessoa(Pessoa pessoa) throws TelefoneDuplicadoException {
-        for(Pessoa p : this.pessoas) {
-            if(p.getTelefone().equals(pessoa.getTelefone())) {
-                throw new TelefoneDuplicadoException();
-            }
-        }
-        
+    public void addPessoa(Pessoa pessoa) {
         pessoa.setCodigo(this.codigo++);
         this.pessoas.add(pessoa);
     }
@@ -88,28 +80,31 @@ public class Sorteio {
 
     /**
      * Efetua o sorteio
-     * @return Retorna um Map, onde a chave é o número do telefone da pessoa que 
-     * receberá a mensagem, e o segundo parâmetro é a Pessoa que receberá o presente.
-     * Exemplo: A Pessoa de telefone X, deve presentear a Pessoa Y.
+     * @return Retorna um Map, onde a chave é o código da pessoa, gerado pelo sistema,
+     * e o segundo parâmetro é a Pessoa que efetuou o sorteio, contendo a Pessoa sorteada.
+     * Exemplo: A Pessoa.getNome(), deve presentear a Pessoa.getPessoaSorteada().getNome()
      * @throws TotalDePessoasEhImparException 
      */
-    public Map<String, Pessoa> inicia() throws TotalDePessoasEhImparException {
+    public Map<Integer, Pessoa> inicia() throws TotalDePessoasEhImparException {
         if(!totalDePessoasEhPar())
             throw new TotalDePessoasEhImparException();
         
         this.pessoasCopia = this.copia(pessoas);
         
         for (int i = 0; i < this.totalDePessoas(); i++) {
-            Pessoa pSorteou = this.pessoas.get(i);
-            Pessoa pSorteada = pegaDaLista(pSorteou);
+            Pessoa pessoaQueSorteou = this.pessoas.get(i);
+            Pessoa pessoaQueFoiSorteada = pegaDaLista(pessoaQueSorteou);
             
-            this.pessoasSorteadas.put(pSorteou.getTelefone(), pSorteada);
-            this.pessoasCopia.remove(pSorteada);
+            pessoaQueSorteou.addPessoaSorteada(pessoaQueFoiSorteada);
             
-            System.out.println(pSorteou.getNome() + 
-                    " (fone: " + pSorteou.getTelefone() + 
+            this.pessoasSorteadas.put(pessoaQueSorteou.getCodigo(), pessoaQueSorteou);
+            this.pessoasCopia.remove(pessoaQueFoiSorteada);
+            
+            System.out.println(pessoaQueSorteou.getNome() + 
+                    " (fone: " + pessoaQueSorteou.getTelefone() + 
                     ") --> Deve presentear " + 
-                    pSorteada.getNome() + " (fone: " + pSorteada.getTelefone() + ")");
+                    pessoaQueSorteou.getPessoaSorteada().getNome() + 
+                    " (fone: " + pessoaQueSorteou.getPessoaSorteada().getTelefone() + ")");
         }
         
         return this.pessoasSorteadas;
