@@ -89,7 +89,9 @@ public class Sorteio {
         if(!totalDePessoasEhPar())
             throw new TotalDePessoasEhImparException();
         
-        this.pessoasCopia = this.copiaLista(pessoas);
+        // Utiliza o método clone() da classe ArrayList para criar uma cópia
+        // da lista original (uma nova lista).
+        this.pessoasCopia = (List<Pessoa>) ((ArrayList) this.pessoas).clone();
         
         for (int i = 0; i < this.totalDePessoas(); i++) {
             Pessoa pessoaQueSorteou = this.pessoas.get(i);
@@ -120,14 +122,6 @@ public class Sorteio {
         int range = (maximum - minimum) + 1;
         int randomNum =  random.nextInt(range) + minimum;
         return randomNum;
-    }
-    
-    private List<Pessoa> copiaLista(List<Pessoa> pessoas) {
-        List<Pessoa> novaLista = new ArrayList<>(pessoas.size());
-        for (Pessoa p : pessoas) {
-            novaLista.add(p);
-        }
-        return novaLista;
     }
 }
 
