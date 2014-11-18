@@ -80,6 +80,11 @@ public class SorteiaTest {
         }
     }
     
+    @Test(expected = TotalDePessoasEhImparException.class)
+    public void deveNegarOSorteioComAListaDePessoasVazia() throws TotalDePessoasEhImparException {
+        this.sorteador.inicia();
+    }
+    
     @Test
     public void deveSortearComTelefonesRepetidos() throws TotalDePessoasEhImparException {
         Pessoa p1 = new Pessoa("Valdinei", "9999");

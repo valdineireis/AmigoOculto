@@ -75,7 +75,7 @@ public class Sorteio {
      * @return 
      */
     public boolean totalDePessoasEhPar() {
-        return this.totalDePessoas() % 2 == 0;
+        return this.pessoas.isEmpty() ? false : this.totalDePessoas() % 2 == 0;
     }
 
     /**
