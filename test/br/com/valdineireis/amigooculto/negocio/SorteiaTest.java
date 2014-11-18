@@ -129,10 +129,11 @@ public class SorteiaTest {
     private void assertContainsNomePessoa(List<Pessoa> participantes, Map<Integer, Pessoa> sorteados) {
         for (int i = 0; i < this.sorteador.totalDePessoas(); i++) {
             Pessoa pessoa = participantes.get(i);
-            //Pessoa p = new Pessoa("Pessoa " + i, i + "9999");
             pessoa.setCodigo(i++);
             if(!sorteados.containsValue(pessoa)) {
                 fail("Pessoa com o nome '" + pessoa.getNome() + "', não encontrada!");
+            }else if(sorteados.get(pessoa.getCodigo()).getPessoaSorteada() == null) {
+                fail("Pessoa com o nome '" + pessoa.getNome() + "', não contém pessoa sorteada!");
             }
         }
     }
