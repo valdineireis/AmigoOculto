@@ -108,9 +108,18 @@ public class SorteiaTest {
         adicionaPessoas(8);
         Map<Integer, Pessoa> sorteados = this.sorteador.inicia();
         
+        imprime(sorteados);
+        
         assertNotNull(sorteados);
         assertEquals(8, sorteados.size());
         assertContainsNomePessoa(this.sorteador.pessoas(), sorteados);
+    }
+    
+    private void imprime(Map<Integer, Pessoa> sorteados) {
+        for(Pessoa p : sorteados.values()) {
+            System.out.println(":) '" + p.getNome() + 
+                    "' tirou '" + p.getPessoaSorteada().getNome() + "' no amigo oculto.");
+        }
     }
     
     private void adicionaPessoas(int quantidade) {

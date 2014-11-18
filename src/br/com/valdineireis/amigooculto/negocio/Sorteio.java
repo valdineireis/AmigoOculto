@@ -99,12 +99,6 @@ public class Sorteio {
             
             this.pessoasSorteadas.put(pessoaQueSorteou.getCodigo(), pessoaQueSorteou);
             this.pessoasCopia.remove(pessoaQueFoiSorteada);
-            
-            System.out.println(pessoaQueSorteou.getNome() + 
-                    " (fone: " + pessoaQueSorteou.getTelefone() + 
-                    ") --> Deve presentear " + 
-                    pessoaQueSorteou.getPessoaSorteada().getNome() + 
-                    " (fone: " + pessoaQueSorteou.getPessoaSorteada().getTelefone() + ")");
         }
         
         return this.pessoasSorteadas;
