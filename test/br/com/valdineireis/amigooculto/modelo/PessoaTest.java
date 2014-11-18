@@ -34,4 +34,23 @@ public class PessoaTest {
         assertEquals(valdinei, this.pessoa.getNome());
         assertEquals(telefone, this.pessoa.getTelefone());
     }
+    
+    @Test
+    public void naoDeveHaverPessoaSorteadaInicialmente() {
+        this.pessoa = new Pessoa("Valdinei", "9999");
+        assertNull(this.pessoa.getPessoaSorteada());
+    }
+    
+    @Test
+    public void deveAtribuirPessoaSorteada() {
+        this.pessoa = new Pessoa("Valdinei", "9999");
+        
+        String sorteada = "Sorteada";
+        String telefone = "1111";
+        this.pessoa.addPessoaSorteada(new Pessoa(sorteada, telefone));
+        
+        assertNotNull(this.pessoa.getPessoaSorteada());
+        assertEquals(sorteada, this.pessoa.getPessoaSorteada().getNome());
+        assertEquals(telefone, this.pessoa.getPessoaSorteada().getTelefone());
+    }
 }

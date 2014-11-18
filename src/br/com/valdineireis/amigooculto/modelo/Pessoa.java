@@ -12,6 +12,8 @@ public class Pessoa {
     private String nome;
     private String telefone;
     
+    private Pessoa pessoaSorteada;
+    
     public Pessoa(String nome, String telefone) {
         if(nome.trim().isEmpty() || telefone.trim().isEmpty())
             throw new IllegalArgumentException();
@@ -34,6 +36,14 @@ public class Pessoa {
     
     public int getCodigo() {
         return this.codigo;
+    }
+
+    public Pessoa getPessoaSorteada() {
+        return this.pessoaSorteada;
+    }
+
+    public void addPessoaSorteada(Pessoa pessoaSorteada) {
+        this.pessoaSorteada = pessoaSorteada;
     }
 
     @Override
